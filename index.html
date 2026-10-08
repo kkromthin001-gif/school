@@ -21,27 +21,23 @@
                         sarabun: ['Sarabun', 'sans-serif'],
                     },
                     colors: {
-                        primary: '#0d9488', // Teal 600
-                        'primary-hover': '#0f766e', // Teal 700
-                        secondary: '#4ade80', // Green 400
-                        success: '#22c55e', // Green 500
-                        danger: '#ef4444', // Red 500
-                        warning: '#f97316', // Orange 500
+                        primary: '#0d9488',
+                        'primary-hover': '#0f766e',
+                        secondary: '#4ade80',
+                        success: '#22c55e',
+                        danger: '#ef4444',
+                        warning: '#f97316',
                     }
                 }
             }
         }
     </script>
     
-    <!-- Lucide Icons -->
+    <!-- Lucide Icons & SweetAlert2 & Chart.js & XLSX & jsPDF -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- XLSX for Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- jsPDF & html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -82,12 +78,12 @@
 </head>
 <body class="text-gray-800 h-screen flex overflow-hidden">
 
-    <!-- Login Screen Overlay -->
+    <!-- Login Screen -->
     <div id="login-screen" class="fixed inset-0 bg-teal-800 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 transform transition-all">
             <div class="flex flex-col items-center mb-6">
                 <div class="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mb-3 shadow-inner overflow-hidden border-2 border-teal-100">
-                    <img src="https://github.com/user-attachments/assets/85e1a240-d225-48d2-8136-5e4ffbb15c2b" alt="Logo" class="w-16 h-16 object-contain">
+                    <img src="Picture1.jpg" alt="Logo" class="w-16 h-16 object-contain" crossorigin="anonymous" onerror="this.onerror=null;this.src='https://placehold.co/100x100/0d9488/ffffff?text=Logo';">
                 </div>
                 <h2 class="text-2xl font-bold text-gray-800">เข้าสู่ระบบ</h2>
                 <p class="text-sm text-teal-600 font-medium">ระบบกิจกรรมเพื่อสังคมและสาธารณประโยชน์</p>
@@ -98,7 +94,7 @@
                     <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">ชื่อผู้ใช้งาน (Username)</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><i data-lucide="user" class="w-4 h-4"></i></div>
-                        <input type="text" id="login-user" required class="pl-10 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:outline-none" placeholder="ระบุชื่อผู้ใช้งาน หรือชื่อ-นามสกุล">
+                        <input type="text" id="login-user" required class="pl-10 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:outline-none" placeholder="ระบุชื่อผู้ใช้งาน หรือ admin">
                     </div>
                 </div>
                 <div>
@@ -120,7 +116,7 @@
     <aside id="sidebar" class="bg-white w-64 h-full shadow-lg flex flex-col transition-transform transform -translate-x-full md:translate-x-0 absolute md:relative z-40 fixed">
         <div class="p-4 border-b flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <img src="https://github.com/user-attachments/assets/85e1a240-d225-48d2-8136-5e4ffbb15c2b" alt="Logo" class="w-8 h-8 object-contain">
+                <img src="Picture1.jpg" alt="Logo" class="w-8 h-8 object-contain" crossorigin="anonymous" onerror="this.onerror=null;this.src='https://placehold.co/100x100/0d9488/ffffff?text=Logo';">
                 <span class="font-bold text-sm text-primary leading-tight">ระบบกิจกรรม<br>เพื่อสังคมฯ</span>
             </div>
             <button class="md:hidden text-gray-500 hover:text-gray-700" onclick="toggleSidebar()"><i data-lucide="x"></i></button>
@@ -179,7 +175,7 @@
 
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden no-print" onclick="toggleSidebar()"></div>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <div class="flex-1 flex flex-col h-full relative w-full bg-gray-50">
         <header class="bg-white shadow-sm border-b h-16 flex items-center justify-between px-4 lg:px-8 no-print shrink-0 z-10">
             <div class="flex items-center gap-4">
@@ -468,15 +464,12 @@
                 const res = await fetch(API_URL + "?action=getUsers");
                 const users = await res.json();
                 
-                // ค้นหาผู้ใช้จาก username หรือ fullname และรหัสผ่าน
                 let found = users.find(x => (String(x.username).trim() === u || String(x.fullname).trim() === u) && String(x.password).trim() === p);
                 
-                // กำหนดสิทธิ์ Admin พื้นฐาน (รหัสผ่าน 1234 หรือ admin)
                 if(!found && (u.toLowerCase() === 'admin' || p === '1234')) {
                     if(u.toLowerCase() === 'admin' || u.includes('ผู้ดูแล')) {
                         found = { username: 'admin', fullname: 'ผู้ดูแลระบบ', role: 'admin' };
                     } else {
-                        // หากกรอกชื่อครูแต่ไม่มีในชีต ให้ตั้งเป็นครูที่ปรึกษาอัตโนมัติ
                         found = { username: u, fullname: u, role: 'advisor' };
                     }
                 }
@@ -487,7 +480,6 @@
                     document.getElementById('user-role-display').innerText = (found.role === 'admin' || u.toLowerCase() === 'admin') ? 'ผู้ดูแลระบบ' : 'ครูที่ปรึกษา';
                     document.getElementById('user-initial').innerText = found.fullname.charAt(0);
                     
-                    // หากไม่ใช่ Admin ให้ซ่อนเมนูจัดการ
                     if(found.role !== 'admin' && u.toLowerCase() !== 'admin') {
                         document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
                     }
@@ -597,12 +589,12 @@
             else { sb.classList.add('-translate-x-full'); ov.classList.add('hidden'); }
         }
 
-        function handleExcelUpload(e) {
+        async function handleExcelUpload(e) {
             const file = e.target.files[0];
             if(!file) return;
-            showLoading('กำลังอ่านไฟล์ Excel...');
+            showLoading('กำลังอ่านและบันทึกข้อมูลนักเรียน...');
             const reader = new FileReader();
-            reader.onload = function(evt) {
+            reader.onload = async function(evt) {
                 try {
                     const data = new Uint8Array(evt.target.result);
                     const wb = XLSX.read(data, {type: 'array'});
@@ -624,11 +616,17 @@
                     AppState.students = AppState.students.concat(newSt);
                     extractClassesFromStudents();
                     renderStudentsTable();
+
+                    await fetch(API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: 'saveStudents', payload: newSt })
+                    });
+
                     hideLoading();
-                    Swal.fire('สำเร็จ', `นำเข้าข้อมูลนักเรียน ${newSt.length} คน`, 'success');
+                    Swal.fire('สำเร็จ', `นำเข้าและบันทึกนักเรียน ${newSt.length} คนเรียบร้อย`, 'success');
                 } catch(err) {
                     hideLoading();
-                    Swal.fire('ผิดพลาด', 'อ่านไฟล์ไม่สำเร็จ', 'error');
+                    Swal.fire('ผิดพลาด', 'นำเข้าข้อมูลไม่สำเร็จ', 'error');
                 }
             };
             reader.readAsArrayBuffer(file);
@@ -682,7 +680,7 @@
             
             list.forEach(st => {
                 const ev = AppState.evaluations[`${actId}_${st.id}`];
-                const res = ev ? ev.result : 'pass';
+                const res = ev ? ev.result : '';
                 tb.innerHTML += `
                     <tr class="border-b">
                         <td class="p-3 text-center">${st.number}</td>
@@ -748,9 +746,11 @@
                 let pass = 0, fail = 0;
                 stList.forEach(st => {
                     const ev = AppState.evaluations[`${actId}_${st.id}`];
-                    if(!ev || ev.result === 'pass') pass++; else fail++;
+                    if(ev && ev.result === 'pass') pass++; 
+                    else if(ev && ev.result === 'fail') fail++;
                 });
-                const pct = total > 0 ? ((pass/total)*100).toFixed(2) : '0.00';
+                const evaluatedCount = pass + fail;
+                const pct = evaluatedCount > 0 ? ((pass/evaluatedCount)*100).toFixed(2) : '0.00';
                 tb.innerHTML += `
                     <tr class="border-b">
                         <td class="p-4 text-center font-medium">${cls.grade}/${cls.room}</td>
@@ -765,7 +765,7 @@
         function initDashboard() {
             document.getElementById('dash-total-students').innerText = AppState.students.length;
             let p=0, f=0;
-            Object.values(AppState.evaluations).forEach(e => { if(e.result==='pass') p++; else f++; });
+            Object.values(AppState.evaluations).forEach(e => { if(e.result==='pass') p++; else if(e.result==='fail') f++; });
             document.getElementById('dash-passed').innerText = p;
             document.getElementById('dash-failed').innerText = f;
             document.getElementById('dash-activities').innerText = AppState.activities.length;
@@ -795,20 +795,24 @@
             let pass = 0, fail = 0;
             stList.forEach(st => {
                 const ev = AppState.evaluations[`${actId}_${st.id}`];
-                if(!ev || ev.result === 'pass') pass++; else fail++;
+                if(ev && ev.result === 'pass') pass++; 
+                else if(ev && ev.result === 'fail') fail++;
             });
-            const pct = total > 0 ? ((pass/total)*100).toFixed(2) : '0.00';
+            const evaluatedCount = pass + fail;
+            const pct = evaluatedCount > 0 ? ((pass/evaluatedCount)*100).toFixed(2) : '0.00';
 
             const html = `
                 <div style="text-align: center; font-family: 'Sarabun', sans-serif; color: #000; line-height: 1.5;">
                     <div style="margin-bottom: 8px;">
-                        <img src="https://github.com/user-attachments/assets/85e1a240-d225-48d2-8136-5e4ffbb15c2b" alt="Logo" style="width: 90px; height: 90px; object-fit: contain; margin: 0 auto;">
+                        <img src="Picture1.jpg" alt="Logo" style="width: 90px; height: 90px; object-fit: contain; margin: 0 auto; display: block;" crossorigin="anonymous" onerror="this.onerror=null;this.src='https://placehold.co/100x100/0d9488/ffffff?text=Logo';">
                     </div>
                     <div style="font-size: 15pt; font-weight: bold; margin-bottom: 4px;">แบบประเมินผลกิจกรรมเพื่อสังคมและสาธารณประโยชน์</div>
                     <div style="font-size: 13pt; margin-bottom: 4px;">กิจกรรมพัฒนาผู้เรียน โรงเรียนพานทองสภาชนูปถัมภ์</div>
                     <div style="font-size: 13pt; margin-bottom: 12px;">ภาคเรียนที่ ${act?act.semester:'1'} ปีการศึกษา ${act?act.year:'2569'}</div>
                     <div style="border-top: 1px solid #000; width: 30px; margin: 0 auto 12px auto;"></div>
-                    <div style="font-size: 13pt; font-weight: bold; margin-bottom: 12px;">สรุปผลการประเมินนักเรียน ระดับชั้นมัธยมศึกษาปีที่ ${g.replace('ม.','')}/${r}</div>
+                    
+                    <div style="font-size: 13pt; font-weight: bold; margin-bottom: 4px;">สรุปผลการประเมินนักเรียน</div>
+                    <div style="font-size: 13pt; font-weight: bold; margin-bottom: 12px;">ระดับชั้นมัธยมศึกษาปีที่ ${g.replace('ม.','')}/${r}</div>
 
                     <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12pt; border: 1px solid #000; text-align: center;">
                         <thead>
@@ -835,9 +839,11 @@
                     </table>
 
                     <div style="border: 2px double #000; padding: 14px; text-align: left; font-size: 11pt;">
-                        <div style="font-weight: bold; text-align: center; margin-bottom: 10px;">การอนุมัติผลการประเมินกิจกรรม ม.${g.replace('ม.','')}/${r}</div>
+                        <div style="font-weight: bold; text-align: center; margin-bottom: 10px;">การอนุมัติผลการประเมินกิจกรรม ระดับชั้นมัธยมศึกษาปีที่ ${g.replace('ม.','')}/${r}</div>
                         <div style="margin-bottom: 6px;">ลงชื่อ ........................................................................ ครูที่ปรึกษา</div>
-                        <div style="margin-bottom: 6px;">ลงชื่อ ........................................................................ หัวหน้างานกิจกรรมเพื่อสังคมฯ</div>
+                        <div style="margin-bottom: 6px;">ลงชื่อ ........................................................................ ครูที่ปรึกษา</div>
+                        <div style="margin-bottom: 6px;">ลงชื่อ ........................................................................ หัวหน้ากิจกรรมเพื่อสังคมฯ</div>
+                        <div style="margin-bottom: 6px;">ลงชื่อ ........................................................................ หัวหน้างานกิจกรรมพัฒนาผู้เรียน</div>
                         <div style="margin-bottom: 6px;">ลงชื่อ ........................................................................ หัวหน้างานวัดผล</div>
                         <div style="font-weight: bold; margin-top: 10px; margin-bottom: 4px;">เรียนเสนอเพื่อโปรดพิจารณา</div>
                         <div style="margin-left: 20px; margin-bottom: 6px;">ลงชื่อ ........................................................................ รองผู้อำนวยการกลุ่มบริหารงานวิชาการ</div>
@@ -854,7 +860,7 @@
 
         function printReport() {
             const content = document.getElementById('report-preview').innerHTML;
-            if(!content) { Swal.fire('แจ้งเตือน', 'กรุณากดดูตัวอย่างเอกสารก่อนพิมพ์', 'warning'); return; }
+            if(!content || content.trim() === '') { Swal.fire('แจ้งเตือน', 'กรุณากดดูตัวอย่างเอกสารก่อนพิมพ์', 'warning'); return; }
             document.getElementById('print-container').innerHTML = content;
             window.print();
         }
